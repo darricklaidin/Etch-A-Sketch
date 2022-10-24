@@ -54,13 +54,26 @@ input[type='color'] {
     cursor: pointer;
 }
 
-input[type='color']::-webkit-color-swatch-wrapper {
+input[type='color']::-webkit-color-swatch-wrapper{
+    padding: 0;
+    background-color: #e1e1e1;
+    cursor: pointer;
+}
+
+input[type='color']::-moz-color-swatch-wrapper{
     padding: 0;
     background-color: #e1e1e1;
     cursor: pointer;
 }
 
 input[type='color']::-webkit-color-swatch {
+    border: none;
+    border-radius: 50px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    cursor: pointer;
+}
+
+input[type='color']::-moz-color-swatch {
     border: none;
     border-radius: 50px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -81,6 +94,11 @@ input[type='color']::-webkit-color-swatch {
 
 .toolbox button:hover {
     background-color: #e1e1e1;
+}
+
+.toolbox button:active {
+    transition: transform 0.05s ease-in-out;
+    transform: scale(0.95);
 }
 
 #paint-button {
@@ -115,6 +133,8 @@ input[type='color']::-webkit-color-swatch {
 
 .active-tool {
     background-color: #d4d4d4 !important;
+    transition: transform 0.05s ease-in-out;
+    transform: scale(1.05);
 }
 
 /* The grid & the canvas slider */
