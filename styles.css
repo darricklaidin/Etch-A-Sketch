@@ -1,0 +1,77 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100vh;
+    width: 100vw;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h1 {
+    text-align: center;
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    gap: 100px;
+}
+
+.toolbox {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    justify-content: center;
+}
+
+.toolbox button {
+    width: 50px;
+    height: 50px;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+
+/* The grid & the canvas slider */
+.grid-area {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+/* The entire grid */
+.grid-content {
+    background-color: black;
+    display: grid;
+    grid-template-columns: 150px 150px 150px;
+    padding: 1px;
+    gap: 1px;
+}
+
+/* Grid cell */
+.grid {
+    background-color: rgb(52, 168, 168);
+    cursor: crosshair;
+    height: 100px
+}
+
+/* The slider and the text value displayed */
+.canvas-slider-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#canvas-slider {
+    width: 200px;
+    height: 5px;
+    background-color: gray;
+}
+
+.canvas-slider-area p {
+    font-weight: bold;
+}
