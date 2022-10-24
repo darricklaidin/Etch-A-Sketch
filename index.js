@@ -12,7 +12,7 @@ let sliderValue = document.querySelector('.canvas-slider-area > p');
 sliderValue.textContent = slider.value + " x " + slider.value;
 let gridContent = document.querySelector('.grid-content');
 let gridLinesIsPresent = DEFAULT_GRID_LINES_PRESENT
-document.querySelector("#toggle-gridlines-button").onclick = (e) => {
+document.querySelector("#toggle-gridlines-button").onclick = () => {
     if (gridLinesIsPresent) {
         gridLinesIsPresent = false;
         gridContent.style.gap = '0px';
@@ -53,13 +53,7 @@ slider.addEventListener('input', () => {
         // If difference is negative (new < old):
             // Delete all rows and columns based on the difference
         if (difference < 0) {
-            gridContent.setAttribute('style', 'grid-template-columns: repeat(' + newSliderValue + ', 1fr);');
-            if (gridLinesIsPresent) {
-                gridContent.style.gap = '0.25%';
-            }
-            else {
-                gridContent.style.gap = '0px';
-            }
+            gridContent.style.gridTemplateColumns = 'repeat(' + newSliderValue + ', 1fr)';
             // Get the difference of the squared values which indicates the number of divs to remove
             let divsToRemove = Math.abs(Math.pow(newSliderValue, 2) - Math.pow(oldSliderValue, 2));
             // Remove the divs
@@ -71,13 +65,7 @@ slider.addEventListener('input', () => {
         // If difference is positive (new > old):
             // Add all rows and columns based on the difference
         else if (difference > 0) {
-            gridContent.setAttribute('style', 'grid-template-columns: repeat(' + newSliderValue + ', 1fr);');
-            if (gridLinesIsPresent) {
-                gridContent.style.gap = '0.25%';
-            }
-            else {
-                gridContent.style.gap = '0px';
-            }
+            gridContent.style.gridTemplateColumns = 'repeat(' + newSliderValue + ', 1fr)';
             // Get the difference of the squared values which indicates the number of divs to add
             let divsToAdd = Math.abs(Math.pow(newSliderValue, 2) - Math.pow(oldSliderValue, 2));
             // Add the divs
