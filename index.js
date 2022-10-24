@@ -2,24 +2,37 @@
 const TOOLS = ["paint", "eraser"];
 const DEFAULT_TOOL = TOOLS[0];
 const ERASER_COLOR = 'white';
+const DEFAULT_COLOR = 'black';
 
 // Canvas configs
-var slider = document.querySelector('#canvas-slider');
-var oldSliderValue = slider.value;
-var sliderValue = document.querySelector('.canvas-slider-area > p');
+let slider = document.querySelector('#canvas-slider');
+let oldSliderValue = slider.value;
+let sliderValue = document.querySelector('.canvas-slider-area > p');
 sliderValue.textContent = slider.value + " x " + slider.value;
-var gridContent = document.querySelector('.grid-content');
+let gridContent = document.querySelector('.grid-content');
 
 // Tool configs
-let allTools = Array.from(document.querySelector('.toolbox').children);
+let allTools = Array.from(document.querySelectorAll('.toolbox > button'));
 // Set default tool to be active
 document.querySelector(`#${DEFAULT_TOOL}-button`).classList.toggle('active-tool');
 let mouseDown = false
 document.body.onmousedown = () => (mouseDown = true)
 document.body.onmouseup = () => (mouseDown = false)
 
+// Color configs
+let colorPicker = document.querySelector('#color-picker');
+
+// Clear canvas
+let clearCanvas = () => {
+    let grid = document.querySelectorAll('.grid');
+    grid.forEach((grid) => {
+        grid.style.backgroundColor = ERASER_COLOR;
+    });
+}
+
 // Change canvas size on slider change
 slider.addEventListener('input', () => {
+    clearCanvas();
     // Change the canvas grid size
         // Get the new slider value
         let newSliderValue = slider.value;
@@ -62,11 +75,12 @@ slider.addEventListener('input', () => {
     sliderValue.textContent = slider.value + " x " + slider.value;
 });
 
+// Change colour based on tool
 let changeColor = (e) => {
     if (e.type === 'mouseover' && mouseDown || e.type === 'mousedown') {
         if (e.target.classList.contains('grid')) {
             if (document.querySelector('.active-tool').id === 'paint-button') {
-                e.target.style.backgroundColor = 'black';
+                e.target.style.backgroundColor = colorPicker.value;
             }
             else if (document.querySelector('.active-tool').id === 'eraser-button') {
                 e.target.style.backgroundColor = ERASER_COLOR;
@@ -79,25 +93,19 @@ let changeColor = (e) => {
 gridContent.addEventListener('mouseover', changeColor);
 gridContent.addEventListener('mousedown', changeColor);
 
-// Toggle active tool on click tool button
+// Toggle active tool on click tool button except clear button
 allTools.forEach(tool => {
-    tool.addEventListener('click', (e) => {
-        allTools.forEach(element => {
-            element.classList.remove('active-tool');
+    if (tool.id != "clear-button") {
+        tool.addEventListener('click', (e) => {
+            allTools.forEach(element => {
+                element.classList.remove('active-tool');
+            });
+            // Toggle active tool
+            e.target.classList.toggle('active-tool');
         });
-        
-        // Toggle active tool
-        e.target.classList.toggle('active-tool');
-    });
+    }
 });
 
-// Clear canvas
-let clearCanvas = () => {
-    let grid = document.querySelectorAll('.grid');
-    grid.forEach((grid) => {
-        grid.style.backgroundColor = ERASER_COLOR;
-    });
-}
 
 // On clear button click
 document.querySelector('#clear-button').addEventListener('click', clearCanvas);
