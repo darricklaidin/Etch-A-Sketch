@@ -89,7 +89,8 @@ slider.addEventListener('input', () => {
 
 // Change colour based on tool
 let changeColor = (e) => {
-    if (e.type === 'mouseover' && !mouseDown || e.target.classList.contains('grid-content')) return
+    if (e.type === 'mouseover' && !mouseDown) return
+    e.preventDefault();
     if (currentTool.id === 'paint-button') {
         e.target.style.backgroundColor = colorPicker.value;
     }
@@ -120,6 +121,7 @@ let changeColor = (e) => {
 // Use tool on mouse [over and down] or [only on click]
 gridContent.addEventListener('mouseover', changeColor);
 gridContent.addEventListener('mousedown', changeColor);
+gridContent.addEventListener('touchmove', changeColor);
 
 // Toggle active tool on click tool button except clear button and toggle gridlines button
 allTools.forEach(tool => {
