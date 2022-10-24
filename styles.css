@@ -47,16 +47,17 @@ h1 {
 .grid-content {
     background-color: black;
     display: grid;
-    grid-template-columns: 150px 150px 150px;
-    padding: 1px;
-    gap: 1px;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 0.5%;
+    gap: 0.5%;
+    width: 500px;
+    aspect-ratio: 1 / 1;
 }
 
 /* Grid cell */
 .grid {
     background-color: rgb(52, 168, 168);
     cursor: crosshair;
-    height: 100px
 }
 
 /* The slider and the text value displayed */
