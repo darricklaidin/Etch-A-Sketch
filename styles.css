@@ -15,16 +15,18 @@ body {
     flex-direction: column;
     justify-content: center;
     background-color: #e1e1e1;
+    padding: 5%;
 }
 
 h1 {
     text-align: center;
+    margin-bottom: 10%;
 }
 
 .content {
     display: flex;
     justify-content: center;
-    gap: 100px;
+    gap: 50px;
 }
 
 .toolbox {
@@ -40,49 +42,51 @@ input[type='color']:hover {
   transform: scale(1.05);
 }
 
-input[type='color']:active {
+#color-picker:active {
     transition: transform 0.05s ease-in-out;
     transform: scale(1);
 }
-  
-input[type='color'] {
-    -webkit-appearance: none;
+
+#color-picker::-webkit-color-swatch-wrapper{
+    padding: 0;
+    background-color: #e1e1e1;
+    cursor: pointer;
+}
+
+#color-picker::-moz-color-swatch-wrapper{
+    padding: 0;
+    background-color: #e1e1e1;
+    cursor: pointer;
+}
+
+#color-picker::-webkit-color-swatch {
+    border: none;
+    border-radius: 50px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    cursor: pointer;
+}
+
+#color-picker::-moz-color-swatch {
+    border: none;
+    border-radius: 50px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    cursor: pointer;
+}
+
+#color-picker {
     appearance: none;
-    width: 80px;
-    height: 80px;
     border: none;
     cursor: pointer;
-}
-
-input[type='color']::-webkit-color-swatch-wrapper{
-    padding: 0;
-    background-color: #e1e1e1;
-    cursor: pointer;
-}
-
-input[type='color']::-moz-color-swatch-wrapper{
-    padding: 0;
-    background-color: #e1e1e1;
-    cursor: pointer;
-}
-
-input[type='color']::-webkit-color-swatch {
-    border: none;
-    border-radius: 50px;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    cursor: pointer;
-}
-
-input[type='color']::-moz-color-swatch {
-    border: none;
-    border-radius: 50px;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    cursor: pointer;
+    width: 70px;
+    height: 70px;
+    max-width: 70px;
+    aspect-ratio: 1/1;
 }
 
 .toolbox button {
     width: 50px;
     height: 50px;
+    max-width: 50px;
     border: 1px solid black;
     border-radius: 5px;
     background-color: #f1f1f1;
@@ -137,12 +141,34 @@ input[type='color']::-moz-color-swatch {
     transform: scale(1.05);
 }
 
+@media (max-width: 530px) {
+    .content {
+        flex-direction: column-reverse;
+        gap: 1%;
+    }
+    
+    .toolbox {
+        flex-direction: row;
+        flex-wrap: wrap;
+        transform: scale(0.8);
+    }
+}
+
+@media (max-height: 790px) {
+    
+    body {
+        transform: scale(0.8);
+    }
+}
+
 /* The grid & the canvas slider */
 .grid-area {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 50px;
+    gap: 25px;
     user-select: none;
+    max-width: 500px;
 }
 
 /* The entire grid */
@@ -152,8 +178,8 @@ input[type='color']::-moz-color-swatch {
     grid-template-columns: repeat(3, 1fr);
     padding: 0.5%;
     gap: 0.25%;
-    width: 500px;
-    aspect-ratio: 1 / 1;
+    max-width: 500px;
+    aspect-ratio: 1/1;
     cursor: crosshair;
 }
 
@@ -161,6 +187,7 @@ input[type='color']::-moz-color-swatch {
 .grid {
     background-color: rgb(255, 255, 255);
     cursor: crosshair;
+    aspect-ratio: 1/1;
 }
 
 /* The slider and the text value displayed */
@@ -172,8 +199,7 @@ input[type='color']::-moz-color-swatch {
 }
 
 #canvas-slider {
-    width: 200px;
-    height: 5px;
+    max-width: 200px;
     background-color: gray;
     cursor: pointer;
 }
