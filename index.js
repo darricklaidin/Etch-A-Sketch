@@ -1,6 +1,7 @@
 // MACROS
 const TOOLS = ["paint", "eraser"];
 const DEFAULT_TOOL = TOOLS[0];
+const ERASER_COLOR = 'white';
 
 // Canvas configs
 var slider = document.querySelector('#canvas-slider');
@@ -9,17 +10,15 @@ var sliderValue = document.querySelector('.canvas-slider-area > p');
 sliderValue.textContent = slider.value + " x " + slider.value;
 var gridContent = document.querySelector('.grid-content');
 
-// Drawing configs
-let mouseDown = false
-document.body.onmousedown = () => (mouseDown = true)
-document.body.onmouseup = () => (mouseDown = false)
-
 // Tool configs
 let allTools = Array.from(document.querySelector('.toolbox').children);
 // Set default tool to be active
 document.querySelector(`#${DEFAULT_TOOL}-button`).classList.toggle('active-tool');
+let mouseDown = false
+document.body.onmousedown = () => (mouseDown = true)
+document.body.onmouseup = () => (mouseDown = false)
 
-// On slider change
+// Change canvas size on slider change
 slider.addEventListener('input', () => {
     // Change the canvas grid size
         // Get the new slider value
@@ -66,16 +65,21 @@ slider.addEventListener('input', () => {
 let changeColor = (e) => {
     if (e.type === 'mouseover' && mouseDown || e.type === 'mousedown') {
         if (e.target.classList.contains('grid')) {
-            e.target.style.backgroundColor = 'black';
+            if (document.querySelector('.active-tool').id === 'paint-button') {
+                e.target.style.backgroundColor = 'black';
+            }
+            else if (document.querySelector('.active-tool').id === 'eraser-button') {
+                e.target.style.backgroundColor = ERASER_COLOR;
+            }
         }
     }
 };
 
-// On mouse [over and down] or [only on click]
+// Use tool on mouse [over and down] or [only on click]
 gridContent.addEventListener('mouseover', changeColor);
 gridContent.addEventListener('mousedown', changeColor);
 
-// On click tool button
+// Toggle active tool on click tool button
 allTools.forEach(tool => {
     tool.addEventListener('click', (e) => {
         allTools.forEach(element => {
@@ -91,7 +95,7 @@ allTools.forEach(tool => {
 let clearCanvas = () => {
     let grid = document.querySelectorAll('.grid');
     grid.forEach((grid) => {
-        grid.style.backgroundColor = 'white';
+        grid.style.backgroundColor = ERASER_COLOR;
     });
 }
 
