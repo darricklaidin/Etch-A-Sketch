@@ -64,12 +64,14 @@ h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 20px;
 }
 
 #canvas-slider {
     width: 200px;
     height: 5px;
     background-color: gray;
+    cursor: pointer;
 }
 
 .canvas-slider-area p {
