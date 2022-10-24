@@ -1,3 +1,7 @@
+// MACROS
+const TOOLS = ["paint", "eraser"];
+const DEFAULT_TOOL = TOOLS[0];
+
 // Canvas configs
 var slider = document.querySelector('#canvas-slider');
 var oldSliderValue = slider.value;
@@ -9,6 +13,11 @@ var gridContent = document.querySelector('.grid-content');
 let mouseDown = false
 document.body.onmousedown = () => (mouseDown = true)
 document.body.onmouseup = () => (mouseDown = false)
+
+// Tool configs
+let allTools = Array.from(document.querySelector('.toolbox').children);
+// Set default tool to be active
+document.querySelector(`#${DEFAULT_TOOL}-button`).classList.toggle('active-tool');
 
 // On slider change
 slider.addEventListener('input', () => {
@@ -65,3 +74,26 @@ let changeColor = (e) => {
 // On mouse [over and down] or [only on click]
 gridContent.addEventListener('mouseover', changeColor);
 gridContent.addEventListener('mousedown', changeColor);
+
+// On click tool button
+allTools.forEach(tool => {
+    tool.addEventListener('click', (e) => {
+        allTools.forEach(element => {
+            element.classList.remove('active-tool');
+        });
+        
+        // Toggle active tool
+        e.target.classList.toggle('active-tool');
+    });
+});
+
+// Clear canvas
+let clearCanvas = () => {
+    let grid = document.querySelectorAll('.grid');
+    grid.forEach((grid) => {
+        grid.style.backgroundColor = 'white';
+    });
+}
+
+// On clear button click
+document.querySelector('#clear-button').addEventListener('click', clearCanvas);
