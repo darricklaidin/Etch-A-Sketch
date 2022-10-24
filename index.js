@@ -1,8 +1,14 @@
+// Canvas configs
 var slider = document.querySelector('#canvas-slider');
 var oldSliderValue = slider.value;
 var sliderValue = document.querySelector('.canvas-slider-area > p');
 sliderValue.textContent = slider.value + " x " + slider.value;
 var gridContent = document.querySelector('.grid-content');
+
+// Drawing configs
+let mouseDown = false
+document.body.onmousedown = () => (mouseDown = true)
+document.body.onmouseup = () => (mouseDown = false)
 
 // On slider change
 slider.addEventListener('input', () => {
@@ -47,3 +53,15 @@ slider.addEventListener('input', () => {
     oldSliderValue = slider.value;
     sliderValue.textContent = slider.value + " x " + slider.value;
 });
+
+let changeColor = (e) => {
+    if (e.type === 'mouseover' && mouseDown || e.type === 'mousedown') {
+        if (e.target.classList.contains('grid')) {
+            e.target.style.backgroundColor = 'black';
+        }
+    }
+};
+
+// On mouse [over and down] or [only on click]
+gridContent.addEventListener('mouseover', changeColor);
+gridContent.addEventListener('mousedown', changeColor);
