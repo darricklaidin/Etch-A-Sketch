@@ -3,6 +3,7 @@ const TOOLS = ["paint", "eraser"];
 const DEFAULT_TOOL = TOOLS[0];
 const ERASER_COLOR = 'white';
 const DEFAULT_COLOR = 'black';
+const DEFAULT_GRID_LINES_PRESENT = true;
 
 // Canvas configs
 let slider = document.querySelector('#canvas-slider');
@@ -10,11 +11,22 @@ let oldSliderValue = slider.value;
 let sliderValue = document.querySelector('.canvas-slider-area > p');
 sliderValue.textContent = slider.value + " x " + slider.value;
 let gridContent = document.querySelector('.grid-content');
+let gridLinesIsPresent = DEFAULT_GRID_LINES_PRESENT
+document.querySelector("#toggle-gridlines-button").onclick = (e) => {
+    if (gridLinesIsPresent) {
+        gridLinesIsPresent = false;
+        gridContent.style.gap = '0px';
+    } else {
+        gridLinesIsPresent = true;
+        gridContent.style.gap = '0.25%';
+    }
+};
 
 // Tool configs
 let allTools = Array.from(document.querySelectorAll('.toolbox > button'));
 // Set default tool to be active
 document.querySelector(`#${DEFAULT_TOOL}-button`).classList.toggle('active-tool');
+let currentTool = allTools[0];
 let mouseDown = false
 document.body.onmousedown = () => (mouseDown = true)
 document.body.onmouseup = () => (mouseDown = false)
@@ -42,6 +54,12 @@ slider.addEventListener('input', () => {
             // Delete all rows and columns based on the difference
         if (difference < 0) {
             gridContent.setAttribute('style', 'grid-template-columns: repeat(' + newSliderValue + ', 1fr);');
+            if (gridLinesIsPresent) {
+                gridContent.style.gap = '0.25%';
+            }
+            else {
+                gridContent.style.gap = '0px';
+            }
             // Get the difference of the squared values which indicates the number of divs to remove
             let divsToRemove = Math.abs(Math.pow(newSliderValue, 2) - Math.pow(oldSliderValue, 2));
             // Remove the divs
@@ -54,6 +72,12 @@ slider.addEventListener('input', () => {
             // Add all rows and columns based on the difference
         else if (difference > 0) {
             gridContent.setAttribute('style', 'grid-template-columns: repeat(' + newSliderValue + ', 1fr);');
+            if (gridLinesIsPresent) {
+                gridContent.style.gap = '0.25%';
+            }
+            else {
+                gridContent.style.gap = '0px';
+            }
             // Get the difference of the squared values which indicates the number of divs to add
             let divsToAdd = Math.abs(Math.pow(newSliderValue, 2) - Math.pow(oldSliderValue, 2));
             // Add the divs
@@ -77,15 +101,31 @@ slider.addEventListener('input', () => {
 
 // Change colour based on tool
 let changeColor = (e) => {
-    if (e.type === 'mouseover' && mouseDown || e.type === 'mousedown') {
-        if (e.target.classList.contains('grid')) {
-            if (document.querySelector('.active-tool').id === 'paint-button') {
-                e.target.style.backgroundColor = colorPicker.value;
-            }
-            else if (document.querySelector('.active-tool').id === 'eraser-button') {
-                e.target.style.backgroundColor = ERASER_COLOR;
-            }
-        }
+    if (e.type === 'mouseover' && !mouseDown || e.target.classList.contains('grid-content')) return
+    if (currentTool.id === 'paint-button') {
+        e.target.style.backgroundColor = colorPicker.value;
+    }
+    else if (currentTool.id === 'lighten-button') {
+        let currentColor = e.target.style.backgroundColor;
+        let currentColorRGB = currentColor.substring(4, currentColor.length-1).split(',');
+        let newColorRGB = currentColorRGB.map((color) => {
+            return Math.min(255, parseInt(color) + 25);
+        });
+        e.target.style.backgroundColor = 'rgb(' + newColorRGB.join(',') + ')';
+    }
+    else if (currentTool.id === 'darken-button') {
+        let currentColor = e.target.style.backgroundColor;
+        let currentColorRGB = currentColor.substring(4, currentColor.length-1).split(',');
+        let newColorRGB = currentColorRGB.map((color) => {
+            return Math.max(0, parseInt(color) - 25);
+        });
+        e.target.style.backgroundColor = 'rgb(' + newColorRGB.join(',') + ')';
+    }
+    else if (currentTool.id === 'rainbow-button') {
+        e.target.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+    }
+    else if (currentTool.id === 'eraser-button') {
+        e.target.style.backgroundColor = ERASER_COLOR;  // has to be string "white" so that darken and ligthen do not affect it because it parses based on rgb substring
     }
 };
 
@@ -93,15 +133,16 @@ let changeColor = (e) => {
 gridContent.addEventListener('mouseover', changeColor);
 gridContent.addEventListener('mousedown', changeColor);
 
-// Toggle active tool on click tool button except clear button
+// Toggle active tool on click tool button except clear button and toggle gridlines button
 allTools.forEach(tool => {
-    if (tool.id != "clear-button") {
+    if (tool.id != "clear-button" && tool.id != "toggle-gridlines-button") {
         tool.addEventListener('click', (e) => {
             allTools.forEach(element => {
                 element.classList.remove('active-tool');
             });
             // Toggle active tool
             e.target.classList.toggle('active-tool');
+            currentTool = e.target;
         });
     }
 });
