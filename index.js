@@ -87,34 +87,59 @@ slider.addEventListener('input', () => {
     sliderValue.textContent = slider.value + " x " + slider.value;
 });
 
+let oldTarget = null;
 // Change colour based on tool
 let changeColor = (e) => {
     if (e.type === 'mouseover' && !mouseDown) return
     e.preventDefault();
+    
+    let target = e.target;
+    
+    if (e.type === 'touchmove') {
+        target = document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY);
+    }
+    
+    // if it's the same target as before, do nothing
+    if (oldTarget != null) {
+        if (oldTarget === target) {
+            console.log("same element");
+            return;
+        }
+        else {
+            console.log("different element");
+            oldTarget = target;
+        }
+    } else {
+        console.log("first element");
+        oldTarget = target;
+    }
+    
+    if (!target.classList.contains('grid')) return;
+    
     if (currentTool.id === 'paint-button') {
-        e.target.style.backgroundColor = colorPicker.value;
+        target.style.backgroundColor = colorPicker.value;
     }
     else if (currentTool.id === 'lighten-button') {
-        let currentColor = e.target.style.backgroundColor;
+        let currentColor = target.style.backgroundColor;
         let currentColorRGB = currentColor.substring(4, currentColor.length-1).split(',');
         let newColorRGB = currentColorRGB.map((color) => {
             return Math.min(255, parseInt(color) + 25);
         });
-        e.target.style.backgroundColor = 'rgb(' + newColorRGB.join(',') + ')';
+        target.style.backgroundColor = 'rgb(' + newColorRGB.join(',') + ')';
     }
     else if (currentTool.id === 'darken-button') {
-        let currentColor = e.target.style.backgroundColor;
+        let currentColor = target.style.backgroundColor;
         let currentColorRGB = currentColor.substring(4, currentColor.length-1).split(',');
         let newColorRGB = currentColorRGB.map((color) => {
             return Math.max(0, parseInt(color) - 25);
         });
-        e.target.style.backgroundColor = 'rgb(' + newColorRGB.join(',') + ')';
+        target.style.backgroundColor = 'rgb(' + newColorRGB.join(',') + ')';
     }
     else if (currentTool.id === 'rainbow-button') {
-        e.target.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        target.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
     }
     else if (currentTool.id === 'eraser-button') {
-        e.target.style.backgroundColor = ERASER_COLOR;  // has to be string "white" so that darken and ligthen do not affect it because it parses based on rgb substring
+        target.style.backgroundColor = ERASER_COLOR;  // has to be string "white" so that darken and ligthen do not affect it because it parses based on rgb substring
     }
 };
 
