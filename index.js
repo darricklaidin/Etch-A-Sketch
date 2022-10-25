@@ -27,9 +27,12 @@ let allTools = Array.from(document.querySelectorAll('.toolbox > button'));
 // Set default tool to be active
 document.querySelector(`#${DEFAULT_TOOL}-button`).classList.toggle('active-tool');
 let currentTool = allTools[0];
-let mouseDown = false
-document.body.onmousedown = () => (mouseDown = true)
-document.body.onmouseup = () => (mouseDown = false)
+let mouseDown = false;
+document.body.onmousedown = () => (mouseDown = true);
+document.body.onmouseup = () => (mouseDown = false);
+let touchDown = false;
+gridContent.ontouchstart = () => (touchDown = true);
+gridContent.ontouchend = () => (touchDown = false);
 
 // Color configs
 let colorPicker = document.querySelector('#color-picker');
@@ -95,24 +98,27 @@ let changeColor = (e) => {
     
     let target = e.target;
     
-    if (e.type === 'touchmove') {
-        target = document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY);
-    }
-    
-    // if it's the same target as before, do nothing
-    if (oldTarget != null) {
-        if (oldTarget === target) {
-            console.log("same element");
-            return;
-        }
-        else {
-            console.log("different element");
-            oldTarget = target;
-        }
-    } else {
-        console.log("first element");
+    // if u click and release on the same grid, change color
+    if (e.type === 'touchstart') {
         oldTarget = target;
     }
+    
+    
+    if (e.type === 'touchmove') {
+        target = document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY);
+        // if it's the same target as before, do nothing
+        if (oldTarget != null) {
+            if (oldTarget === target) {
+                return;
+            }
+            else {
+                oldTarget = target;
+            }
+        } else {
+            oldTarget = target;
+        }
+    }
+    
     
     if (!target.classList.contains('grid')) return;
     
@@ -147,6 +153,7 @@ let changeColor = (e) => {
 gridContent.addEventListener('mouseover', changeColor);
 gridContent.addEventListener('mousedown', changeColor);
 gridContent.addEventListener('touchmove', changeColor);
+gridContent.addEventListener('touchstart', changeColor);
 
 // Toggle active tool on click tool button except clear button and toggle gridlines button
 allTools.forEach(tool => {
